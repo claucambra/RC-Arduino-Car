@@ -11,6 +11,7 @@ SoftwareSerial mySerial(4, 2); // RX, TX
 
 char BTin; // Stores response of the HC-06 Bluetooth device
 int duration = 1000; //Amount of time for each command to make motors turn
+int rtChanger = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -30,7 +31,7 @@ void setup() {
 }
 
 void loop() {
-
+  
   analogWrite(E1, 255);
   analogWrite(E2, 255); // Run both motors full speed
 
@@ -38,10 +39,17 @@ void loop() {
     BTin = mySerial.read(); // No repeats
     Serial.println(BTin);
   }
-  if(atoi(BTin)) {
-    Serial.println("CHANGING DURATION");
-    duration = atoi(BTin);
-  } else {
+  
+  if(isdigit(BTin)) {
+    Serial.println("That's a num!");
+    rtChanger *= 10;
+    rtChanger += BTin - 48; //Offset ascii value code
+  }
+  else {
+    if(rtChanger > 0) {
+      duration = rtChanger;
+    }
+    rtChanger = 0;
     if(BTin == 'w') {
       Serial.println("FORWARD");
       digitalWrite(I1, HIGH);
