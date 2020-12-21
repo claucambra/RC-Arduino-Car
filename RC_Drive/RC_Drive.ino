@@ -41,7 +41,6 @@ void loop() {
   }
   
   if(isdigit(BTin)) {
-    Serial.println("That's a num!");
     rtChanger *= 10;
     rtChanger += BTin - 48; //Offset ascii value code
   }
@@ -50,34 +49,39 @@ void loop() {
       duration = rtChanger;
     }
     rtChanger = 0;
-    if(BTin == 'w') {
-      Serial.println("FORWARD");
-      digitalWrite(I1, HIGH);
-      digitalWrite(I2, LOW);
-      digitalWrite(I3, HIGH);
-      digitalWrite(I4, LOW);
-      delay(duration);
-    } else if(BTin == 'a') {
-      Serial.println("TURNING LEFT");
-      digitalWrite(I1, HIGH);
-      digitalWrite(I2, LOW);
-      digitalWrite(I3, LOW);
-      digitalWrite(I4, LOW);
-      delay(duration);
-    } else if(BTin == 's') {
-      Serial.println("BACKWARD");
-      digitalWrite(I1, LOW);
-      digitalWrite(I2, HIGH);
-      digitalWrite(I3, LOW);
-      digitalWrite(I4, HIGH);
-      delay(duration);
-    } else if(BTin == 'd') {
-      Serial.println("TURNING RIGHT");
-      digitalWrite(I1, LOW);
-      digitalWrite(I2, LOW);
-      digitalWrite(I3, HIGH);
-      digitalWrite(I4, LOW);
-      delay(duration);
+    switch (BTin) {
+      case 'w':
+        Serial.println("FORWARD");
+        digitalWrite(I1, HIGH);
+        digitalWrite(I2, LOW);
+        digitalWrite(I3, HIGH);
+        digitalWrite(I4, LOW);
+        delay(duration);
+        break;
+      case 'a':
+        Serial.println("TURNING LEFT");
+        digitalWrite(I1, HIGH);
+        digitalWrite(I2, LOW);
+        digitalWrite(I3, LOW);
+        digitalWrite(I4, LOW);
+        delay(duration);
+        break;
+      case 's':
+        Serial.println("BACKWARD");
+        digitalWrite(I1, LOW);
+        digitalWrite(I2, HIGH);
+        digitalWrite(I3, LOW);
+        digitalWrite(I4, HIGH);
+        delay(duration);
+        break;
+      case 'd':
+        Serial.println("TURNING RIGHT");
+        digitalWrite(I1, LOW);
+        digitalWrite(I2, LOW);
+        digitalWrite(I3, HIGH);
+        digitalWrite(I4, LOW);
+        delay(duration);
+        break;
     } 
   }
 
