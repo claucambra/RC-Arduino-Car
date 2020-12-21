@@ -77,4 +77,5 @@ void loop() {
   digitalWrite(I2, LOW);
   digitalWrite(I3, LOW);
   digitalWrite(I4, LOW);
+  delay(10);
 }
