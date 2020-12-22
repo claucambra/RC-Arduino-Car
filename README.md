@@ -29,4 +29,5 @@ To build your own compatible RC car, you will need the following components:
 - x1 HC-06 bluetooth module
 - x1 car frame (or building materials to create one yourself)
 - x2 9v rectangle batteries (or equivalent)
+- x2 motors
 - x13 plug in cables (preferably long, I needed extensions for many of them)
