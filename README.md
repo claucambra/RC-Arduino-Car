@@ -11,10 +11,10 @@ Once the code is uploaded to the Arduino Uno and you have connected to the HC-06
 ### Controls
 If you play PC games, these should be familiar:
 
-- **W**: move the car forward
-- **A**: turn the car left
-- **S**: move the car backward
-- **D**: turn the car right
+- **w**: move the car forward
+- **a**: turn the car left
+- **s**: move the car backward
+- **d**: turn the car right
 
 The code has been designed to allow you to concatenate actions. Simply typing in 'w' will make the car move forward, but typing in 'was' will make the car move forward, make it turn left, and make it move backward in succession.
 
