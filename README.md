@@ -1,7 +1,7 @@
 # RC-Arduino-Car
 A remote controlled Arduino car controlled via wireless commands.
 
-[![Alt text](https://img.youtube.com/vi/XinCHzYxBoo/0.jpg)](https://www.youtube.com/watch?v=XinCHzYxBoo)
+[Watch my (bad) video of it in action](https://www.youtube.com/watch?v=XinCHzYxBoo)
 
 ## Use
 There are several schematics (coming!) provided in this repository. You can either follow these, and use the stock RC_Drive sketch, or connect to your desired pins and modify the .ino file yourself. 
