@@ -30,10 +30,45 @@ void setup() {
   mySerial.begin(9600);
 }
 
-void loop() {
-  
+void drive(command){
   analogWrite(E1, 255);
   analogWrite(E2, 255); // Run both motors full speed
+  
+  switch(command) {
+    case "FORWARD":
+      digitalWrite(I1, HIGH);
+      digitalWrite(I2, LOW);
+      digitalWrite(I3, HIGH);
+      digitalWrite(I4, LOW);
+      break;
+    case "BACKWARD":
+      digitalWrite(I1, HIGH);
+      digitalWrite(I2, LOW);
+      digitalWrite(I3, LOW);
+      digitalWrite(I4, LOW);
+      break;
+    case "TURN LEFT":
+      digitalWrite(I1, LOW);
+      digitalWrite(I2, HIGH);
+      digitalWrite(I3, LOW);
+      digitalWrite(I4, HIGH);
+      break;
+    case "TURN RIGHT":
+      digitalWrite(I1, LOW);
+      digitalWrite(I2, LOW);
+      digitalWrite(I3, HIGH);
+      digitalWrite(I4, LOW);
+      break;
+    case "STOP":
+      digitalWrite(I1, LOW);
+      digitalWrite(I2, LOW);
+      digitalWrite(I3, LOW);
+      digitalWrite(I4, LOW);
+      break;
+  } 
+}
+
+void loop() {
 
   if (mySerial.available()) {
     BTin = mySerial.read(); // No repeats
@@ -51,43 +86,24 @@ void loop() {
     rtChanger = 0;
     switch (BTin) {
       case 'w':
-        Serial.println("FORWARD");
-        digitalWrite(I1, HIGH);
-        digitalWrite(I2, LOW);
-        digitalWrite(I3, HIGH);
-        digitalWrite(I4, LOW);
+        drive("FORWARD");
         delay(duration);
         break;
       case 'a':
-        Serial.println("TURNING LEFT");
-        digitalWrite(I1, HIGH);
-        digitalWrite(I2, LOW);
-        digitalWrite(I3, LOW);
-        digitalWrite(I4, LOW);
+        drive("TURN LEFT");
         delay(duration);
         break;
       case 's':
-        Serial.println("BACKWARD");
-        digitalWrite(I1, LOW);
-        digitalWrite(I2, HIGH);
-        digitalWrite(I3, LOW);
-        digitalWrite(I4, HIGH);
+        drive("BACKWARD");
         delay(duration);
         break;
       case 'd':
-        Serial.println("TURNING RIGHT");
-        digitalWrite(I1, LOW);
-        digitalWrite(I2, LOW);
-        digitalWrite(I3, HIGH);
-        digitalWrite(I4, LOW);
+        drive("TURN RIGHT");
         delay(duration);
         break;
     } 
   }
 
-  digitalWrite(I1, LOW);
-  digitalWrite(I2, LOW);
-  digitalWrite(I3, LOW);
-  digitalWrite(I4, LOW);
+  drive("STOP");
   delay(10);
 }
