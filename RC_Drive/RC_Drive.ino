@@ -131,7 +131,9 @@ void waitAndCheckDistance(char input) {
     currentDistance = detectDistance();
     endtime = millis();
   }
-  while(currentDistance < 2) { //Move away if less than 5cm aaway from obstacle
+  while(currentDistance < 2) { //Move away if less than 2cm away from obstacle
+    drive('p');
+    delay(50);
     drive(oppositeDirection);
     delay(duration);
     currentDistance = detectDistance();
