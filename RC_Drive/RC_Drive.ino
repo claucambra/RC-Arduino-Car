@@ -14,7 +14,6 @@ SoftwareSerial mySerial(4, 2); // RX, TX
 char BTin; // Stores response of the HC-06 Bluetooth device
 int duration = 1000; //Amount of time for each command to make motors turn
 int rtChanger = 0;
-int currentDistance;
 
 void setup() {
   // put your setup code here, to run once:
@@ -99,9 +98,47 @@ int detectDistance() {
   return duration / 29 / 2; //Returns distance in centimeters (speed of sound is 29 cm per microsecond, then half the time of ping out and then in)
 }
 
-void loop() {
-  currentDistance = detectDistance();
+void waitAndCheckDistance(char input) {
+  char oppositeDirection;
+  switch(input) {
+    case 'w': //FORWARD
+      oppositeDirection = 's';
+      break;
+    case 's': //BACKWARD
+      oppositeDirection = 'w';
+      break;
+    case 'a': //TURN LEFT
+      oppositeDirection = 'd';
+      break;
+    case 'd': //TURN RIGHT
+      oppositeDirection = 'a';
+      break;
+    case 'q': //SPIN LEFT
+      oppositeDirection = 'e';
+      break;
+    case 'e': //SPIN RIGHT
+      oppositeDirection = 'q';
+      break;
+    case 'p': //STOP
+      oppositeDirection = 'p';
+      break;
+  } 
+  
+  int currentDistance;
+  int starttime = millis();
+  int endtime = starttime;
+  while ((endtime - starttime) <= duration && currentDistance > 5) { // do this loop for set duration
+    currentDistance = detectDistance();
+    endtime = millis();
+  }
+  while(currentDistance < 2) { //Move away if less than 5cm aaway from obstacle
+    drive(oppositeDirection);
+    delay(duration);
+    currentDistance = detectDistance();
+  }
+}
 
+void loop() {
   if (mySerial.available()) {
     BTin = mySerial.read(); // No repeats
     Serial.println(BTin);
@@ -116,42 +153,34 @@ void loop() {
       duration = rtChanger;
     }
     rtChanger = 0;
-    //while(currentDistance > 5) { //5cm distance
-      switch (BTin) {
-        case 'w':
-          drive('w');
-          delay(duration);
-          break;
-        case 'a':
-          drive('a');
-          delay(duration);
-          break;
-        case 's':
-          drive('s');
-          delay(duration);
-          break;
-        case 'd':
-          drive('d');
-          delay(duration);
-          break;
-        case 'q':
-          drive('q');
-          delay(duration);
-          break;
-        case 'e':
-          drive('e');
-          delay(duration);
-          break;
-      //} 
-    } while (currentDistance < 5) {
-      drive('s');
-      delay(500);
-      drive('e');
-      delay(750);
-      currentDistance = detectDistance();
-    }
+    switch (BTin) {
+      case 'w':
+        drive('w');
+        waitAndCheckDistance('w');
+        break;
+      case 'a':
+        drive('a');
+        waitAndCheckDistance('a');
+        break;
+      case 's':
+        drive('s');
+        waitAndCheckDistance('s');
+        break;
+      case 'd':
+        drive('d');
+        waitAndCheckDistance('d');
+        break;
+      case 'q':
+        drive('q');
+        waitAndCheckDistance('q');
+        break;
+      case 'e':
+        drive('e');
+        waitAndCheckDistance('e');
+        break;
+    } 
   }
 
-  drive('p');
+  drive('p'); //Stop motors
   delay(10);
 }
