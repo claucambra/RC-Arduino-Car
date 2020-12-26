@@ -125,17 +125,26 @@ void waitAndCheckDistance(char input) {
   } 
   
   int currentDistance;
+  int distanceResults[3];
   int starttime = millis();
   int endtime = starttime;
-  while ((endtime - starttime) <= duration && currentDistance > 5) { // do this loop for set duration
+  int i = 0;
+  do { // do this loop for set duration
+    
+    if(i == 2)
+      i = 0;
+    else      
+      i++;
+   
     currentDistance = detectDistance();
+    distanceResults[i] = currentDistance;
     endtime = millis();
-  }
+  } while ((endtime - starttime) <= duration && (distanceResults[0] > 5 || distanceResults[1] > 5 || distanceResults[2] > 5));
   while(currentDistance < 2) { //Move away if less than 2cm away from obstacle
     drive('p');
     delay(50);
     drive(oppositeDirection);
-    delay(duration);
+    delay(250);
     currentDistance = detectDistance();
   }
 }
