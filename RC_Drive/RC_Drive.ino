@@ -42,20 +42,32 @@ void drive(command){
       digitalWrite(I4, LOW);
       break;
     case "BACKWARD":
-      digitalWrite(I1, HIGH);
-      digitalWrite(I2, LOW);
-      digitalWrite(I3, LOW);
-      digitalWrite(I4, LOW);
-      break;
-    case "TURN LEFT":
       digitalWrite(I1, LOW);
       digitalWrite(I2, HIGH);
       digitalWrite(I3, LOW);
       digitalWrite(I4, HIGH);
       break;
+    case "TURN LEFT":
+      digitalWrite(I1, HIGH);
+      digitalWrite(I2, LOW);
+      digitalWrite(I3, LOW);
+      digitalWrite(I4, LOW);
+      break;
     case "TURN RIGHT":
       digitalWrite(I1, LOW);
       digitalWrite(I2, LOW);
+      digitalWrite(I3, HIGH);
+      digitalWrite(I4, LOW);
+      break;
+    case "SPIN LEFT":
+      digitalWrite(I1, HIGH);
+      digitalWrite(I2, LOW);
+      digitalWrite(I3, LOW);
+      digitalWrite(I4, HIGH);
+      break;
+    case "SPIN LEFT":
+      digitalWrite(I1, LOW);
+      digitalWrite(I2, HIGH);
       digitalWrite(I3, HIGH);
       digitalWrite(I4, LOW);
       break;
@@ -75,7 +87,7 @@ void loop() {
     Serial.println(BTin);
   }
   
-  if(isdigit(BTin)) {
+  if(isdigit(BTin)) { //Detect if number provided, if so change duration of actions
     rtChanger *= 10;
     rtChanger += BTin - 48; //Offset ascii value code
   }
