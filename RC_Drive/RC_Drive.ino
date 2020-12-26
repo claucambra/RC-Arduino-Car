@@ -9,9 +9,12 @@ SoftwareSerial mySerial(4, 2); // RX, TX
 #define I3 12  // Control pin 1 for motor 2
 #define I4 13  // Control pin 2 for motor 2
 
+#define ultrasoundPin 7 // Signal pin for ultrasound sensor
+
 char BTin; // Stores response of the HC-06 Bluetooth device
 int duration = 1000; //Amount of time for each command to make motors turn
 int rtChanger = 0;
+int currentDistance;
 
 void setup() {
   // put your setup code here, to run once:
@@ -30,48 +33,48 @@ void setup() {
   mySerial.begin(9600);
 }
 
-void drive(command){
+void drive(char command) {
   analogWrite(E1, 255);
   analogWrite(E2, 255); // Run both motors full speed
-  
+
   switch(command) {
-    case "FORWARD":
+    case 'w': //FORWARD
       digitalWrite(I1, HIGH);
       digitalWrite(I2, LOW);
       digitalWrite(I3, HIGH);
       digitalWrite(I4, LOW);
       break;
-    case "BACKWARD":
+    case 's': //BACKWARD
       digitalWrite(I1, LOW);
       digitalWrite(I2, HIGH);
       digitalWrite(I3, LOW);
       digitalWrite(I4, HIGH);
       break;
-    case "TURN LEFT":
+    case 'a': //TURN LEFT
       digitalWrite(I1, HIGH);
       digitalWrite(I2, LOW);
       digitalWrite(I3, LOW);
       digitalWrite(I4, LOW);
       break;
-    case "TURN RIGHT":
+    case 'd': //TURN RIGHT
       digitalWrite(I1, LOW);
       digitalWrite(I2, LOW);
       digitalWrite(I3, HIGH);
       digitalWrite(I4, LOW);
       break;
-    case "SPIN LEFT":
+    case 'q': //SPIN LEFT
       digitalWrite(I1, HIGH);
       digitalWrite(I2, LOW);
       digitalWrite(I3, LOW);
       digitalWrite(I4, HIGH);
       break;
-    case "SPIN LEFT":
+    case 'e': //SPIN RIGHT
       digitalWrite(I1, LOW);
       digitalWrite(I2, HIGH);
       digitalWrite(I3, HIGH);
       digitalWrite(I4, LOW);
       break;
-    case "STOP":
+    case 'p': //STOP
       digitalWrite(I1, LOW);
       digitalWrite(I2, LOW);
       digitalWrite(I3, LOW);
@@ -80,7 +83,24 @@ void drive(command){
   } 
 }
 
+int detectDistance() {
+  long duration; //Duration of the ping out
+  
+  pinMode(ultrasoundPin, OUTPUT);
+  digitalWrite(ultrasoundPin, LOW);
+  delayMicroseconds(2); //Short low pulse to ensure clean high pulse
+  digitalWrite(ultrasoundPin, HIGH);
+  delayMicroseconds(5); //
+  digitalWrite(ultrasoundPin, LOW);
+
+  pinMode(ultrasoundPin, INPUT);
+  duration = pulseIn(ultrasoundPin, HIGH); //Time it takes for echo of HIGH ping to return
+
+  return duration / 29 / 2; //Returns distance in centimeters (speed of sound is 29 cm per microsecond, then half the time of ping out and then in)
+}
+
 void loop() {
+  currentDistance = detectDistance();
 
   if (mySerial.available()) {
     BTin = mySerial.read(); // No repeats
@@ -96,26 +116,42 @@ void loop() {
       duration = rtChanger;
     }
     rtChanger = 0;
-    switch (BTin) {
-      case 'w':
-        drive("FORWARD");
-        delay(duration);
-        break;
-      case 'a':
-        drive("TURN LEFT");
-        delay(duration);
-        break;
-      case 's':
-        drive("BACKWARD");
-        delay(duration);
-        break;
-      case 'd':
-        drive("TURN RIGHT");
-        delay(duration);
-        break;
-    } 
+    //while(currentDistance > 5) { //5cm distance
+      switch (BTin) {
+        case 'w':
+          drive('w');
+          delay(duration);
+          break;
+        case 'a':
+          drive('a');
+          delay(duration);
+          break;
+        case 's':
+          drive('s');
+          delay(duration);
+          break;
+        case 'd':
+          drive('d');
+          delay(duration);
+          break;
+        case 'q':
+          drive('q');
+          delay(duration);
+          break;
+        case 'e':
+          drive('e');
+          delay(duration);
+          break;
+      //} 
+    } while (currentDistance < 5) {
+      drive('s');
+      delay(500);
+      drive('e');
+      delay(750);
+      currentDistance = detectDistance();
+    }
   }
 
-  drive("STOP");
+  drive('p');
   delay(10);
 }
