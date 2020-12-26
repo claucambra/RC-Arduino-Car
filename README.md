@@ -1,6 +1,9 @@
 # RC-Arduino-Car
 A remote controlled Arduino car controlled via wireless commands.
 
+[Watch my (bad) video of it in action](https://www.youtube.com/watch?v=XinCHzYxBoo)
+*NOTE:* This version does not feature collision detection. Hence the scream.
+
 ## Use
 There are several schematics provided in this repository. You can either follow these, and use the stock RC_Drive sketch, or connect to your desired pins and modify the .ino file yourself. 
 
