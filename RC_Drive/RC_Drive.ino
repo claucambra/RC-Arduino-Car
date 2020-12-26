@@ -102,10 +102,8 @@ void waitAndCheckDistance(char input) {
   char oppositeDirection;
   switch(input) {
     case 'w': //FORWARD
-      oppositeDirection = 's';
-      break;
     case 's': //BACKWARD
-      oppositeDirection = 'w';
+      oppositeDirection = 's';
       break;
     case 'a': //TURN LEFT
       oppositeDirection = 'd';
@@ -140,20 +138,21 @@ void waitAndCheckDistance(char input) {
     endtime = millis();
   } while ((endtime - starttime) <= duration && (distanceResults[0] > 5 || distanceResults[1] > 5 || distanceResults[2] > 5)); 
   //Do for duration of action or until all distance results below threshold
-  
-  while(distanceResults[0] > 5 || distanceResults[1] > 5 || distanceResults[2] > 5) { //Move away if less than 5cm away from obstacle
+
+  drive('p');
+  delay(50);
+  while(distanceResults[0] < 5 || distanceResults[1] < 5 || distanceResults[2] < 5) { //Move away if less than 5cm away from obstacle
     if(i == 2)
       i = 0;
     else      
       i++;
-    
-    drive('p');
-    delay(50);
-    drive(oppositeDirection);
-    delay(500);
+
     currentDistance = detectDistance();
     distanceResults[i] = currentDistance;
+
+    drive(oppositeDirection);
   }
+  drive('p');
 }
 
 void loop() {
